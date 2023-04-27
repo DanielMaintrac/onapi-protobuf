@@ -1,0 +1,104 @@
+//ON-API specification
+syntax = "proto3";
+option go_package = "api/";
+
+// Main comment
+package main;
+
+// Service comment!
+service OnApiService {
+  //Use this to fetch a single access
+  rpc SendOneAccess(SingleAccessRequest) returns (AccessResponse) {}
+  // Send a single access
+  rpc SendAccess(AccessRequest) returns (AccessResponse) {}
+  // Stream accesses
+  rpc StreamAccesses(AccessRequest) returns (stream AccessResponse) {}
+  // Stream subscriptions
+  rpc Subscriptions(SubscriptionRequest) returns (stream SubscriptionResponse) {}
+}
+
+message SubscriptionRequest {}
+
+message SubscriptionResponse {
+  string subscriptionId = 1;
+  string accessId = 2;
+  string service = 3;
+  enum OPERATIONALSTATE {
+    ACTIVATED = 0;
+    DEACTIVATED = 1;
+  }
+  OPERATIONALSTATE operationalState = 4;
+  string spReference = 5;
+  string spSubscriptionId = 6;
+  string option82 = 7;
+  DhcpIdentifier dhcpIdentifier = 8;
+  string note = 9;
+}
+
+message OperationalState {
+
+}
+
+message characteristics {
+  bool  fixedIp = 1;
+  string SLA = 2;
+  repeated string ipAddress = 3;
+}
+
+message DhcpIdentifier {
+  string ipv4CircuitId = 1;
+}
+
+message AccessRequest {
+  string since = 1;
+}
+message SingleAccessRequest {
+  string accessId = 1;
+}
+
+message AccessResponse {
+  enum STATUS{
+    ACTIVE = 0;
+    DELETED = 1;
+  }
+  STATUS status = 1;
+  string accessId = 2;
+  string legacyAccessId = 3;
+  string streetName = 4;
+  string streetNumber = 5;
+  string streetLittera = 6;
+  string postalCode = 7;
+  string city = 8;
+  enum COUNTRY_CODE {
+    SE = 0;
+  }
+  COUNTRY_CODE countryCode = 9;
+  enum PREMISESTYPE {
+    COMMERCIAL = 0;
+    MDU_APARTMENT = 1;
+    MDU_COMMON = 2;
+    MDU_TECHNICAL = 3;
+    PUBLIC = 4;
+    RESIDENTIAL_HOUSE = 5;
+    UNKNOWN = 6;
+  }
+  PREMISESTYPE premisesType = 10;
+  string mduApartmentNumber = 11;
+  string mduDistinguisher = 12;
+  string outlet = 13;
+  string population = 14;
+  enum ACCESSSTATE {
+    PLANNED = 0;
+    DEPLOYING = 1;
+    HOMESPASSED = 2;
+    CONNECTED = 3;
+    DISCONNECTED = 4;
+  }
+  ACCESSSTATE accessState = 15;
+  enum CONETWORKAGREEMENT {
+    REQUIRED_NOT_VALID = 0;
+    REQUIRED_VALID = 1;
+    NOT_REQUIRED = 2;
+  }
+  CONETWORKAGREEMENT coNetworkAgreement = 16;
+}
